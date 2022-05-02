@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class main {
@@ -97,27 +99,41 @@ public class main {
     * @param  BufferedReader: file a donde realizar la búsqueda
     * @ return Número de apariciones de la palabra buscada
      */
-    public static int find (String palabra, BufferedReader rd) throws IOException {
+    public static int find (String frase, BufferedReader rd) throws IOException {
 
-        int contador = 0;
-        int in = 0;
+        int cont =0;
+        String[] separa = separador(frase);
         String linea;
+        while ((linea = rd.readLine()) != null) {
+            String[] palabras = linea.split(" ");
+            String fraseDevuelta = new String();
+            for (int i = 0; i < palabras.length; i++) {
+                int f = i;
+                if (palabras[i].equals(separa[0])) {
+                    for (int j = 0; j < separa.length; j++) {
 
-            while ((linea = rd.readLine()) != null) {
+                        if (j < separa.length-1) {
+                            fraseDevuelta = fraseDevuelta + palabras[f] + " ";
+                            f =f+1;
+                        } else {
+                            fraseDevuelta = fraseDevuelta +palabras[f];
+                            f =f+1;
+                        }
 
-                    while ((linea.indexOf(palabra, in) != -1) ){
 
-                            contador = contador+1;
-                            break;
                     }
-                    in ++;
+
+                    if (fraseDevuelta.equals(frase)) {
+                        cont = cont + 1;
+
+                    }
+
                 }
 
+            }
 
-
-
-            return contador;
-
+        }
+        return cont;
     }
 
     /*
@@ -126,10 +142,9 @@ public class main {
     * @param BufferedReader archivo donde se realiza la búsqueda.
     * @return int devuelve la cantidad de apariciones de la palabra.
      */
-    public static int buscaPalabras(String palabra,BufferedReader rd ) throws IOException {
-
-        String linea;
+    public static int buscaPalabras(String palabra ,BufferedReader rd ) throws IOException {
         int cont =0;
+       String linea;
         while((linea = rd.readLine()) != null) {
             String[] palabras = linea.split(" ");
             for(int i = 0 ; i < palabras.length ; i++) {
@@ -141,14 +156,12 @@ public class main {
         }
         return cont;
     }
-
-    /*
-    * Método que separa las palabras de la frase recibida.
-    * @param String frase ingresada por el usuario.
-    * @return Array de String, con las palabras ingresadas.
-     */
-    public static String [] separador (String frase){
-        return frase.split(" ");
+        /*
+         * Método que separa las palabras de la frase recibida.
+         * @param String frase ingresada por el usuario.
+         * @return Array de String, con las palabras ingresadas.
+         */
+        public static String[] separador (String frase){
+            return frase.split(" ");
+        }
     }
-
-}
