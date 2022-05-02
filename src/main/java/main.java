@@ -118,6 +118,13 @@ public class main {
             return contador;
 
     }
+
+    /*
+    *Método que busca palabra por palabra en cada una de las lineas.
+    * @param String que contiene la palabra a buscar,
+    * @param BufferedReader archivo donde se realiza la búsqueda.
+    * @return int devuelve la cantidad de apariciones de la palabra.
+     */
     public static int buscaPalabras(String palabra,BufferedReader rd ) throws IOException {
 
         String linea;
@@ -134,9 +141,13 @@ public class main {
         return cont;
     }
 
+    /*
+    * Método que separa las palabras de la frase recibida.
+    * @param String frase ingresada por el usuario.
+    * @return Array de String, con las palabras ingresadas.
+     */
     public static String [] separador (String frase){
-        String[] palabras = frase.split(" ");
-        return palabras;
+        return frase.split(" ");
     }
 
 }
