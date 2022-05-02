@@ -105,11 +105,12 @@ public class main {
 
             while ((linea = rd.readLine()) != null) {
 
-                    while ((linea.indexOf(palabra, in ) > -1) ){
-                        contador++;
-                        in ++;
-                        break;
+                    while ((linea.indexOf(palabra, in) != -1) ){
+
+                            contador = contador+1;
+                            break;
                     }
+                    in ++;
                 }
 
 
