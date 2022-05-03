@@ -20,7 +20,7 @@ class mainTest {
         String busca = "bloques de piedra";
         BufferedReader rd = main.creador("https://es.wikipedia.org/wiki/Pir%C3%A1mides_de_Egipto");
         int espera =2;
-        int real = main.find(busca, rd);
+        int real = main.buscaFrase(busca, rd);
         assertEquals(espera,real );
     }
 

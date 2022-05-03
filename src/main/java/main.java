@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class main {
@@ -21,26 +22,24 @@ public class main {
                 }while(url.isEmpty());
                 BufferedReader content = creador(url);
 
-
                 String busca;
                 do {
                     System.out.println("Ingrese la frase a buscar");
-                    Scanner lect1 = new Scanner(System.in);
+                    Scanner lect1 = new Scanner(System.in).useDelimiter("\n");
                      busca = lect1.nextLine();
+                     busca= busca.toLowerCase();
                 }while (busca.isEmpty());
 
                 String [] palabras = separador(busca);
 
-                int encontrado = find(busca, content);
+                if(palabras.length>1){
+                    int encontrado = buscaFrase(busca, content);
 
-                if (encontrado == 0) {
-                    System.out.println("No se encontro la palabra/frase  buscada");
-                } else {
-                    System.out.println( busca + " se encontro " + encontrado + " veces.");
-                }
-
-
-                if (palabras.length > 1){
+                    if (encontrado == 0) {
+                        System.out.println("No se encontro la palabra/frase  buscada");
+                    } else {
+                        System.out.println( busca + " se encontro " + encontrado + " veces.");
+                    }
 
                     for (int i = 0; i < palabras.length ; i++) {
 
@@ -55,11 +54,35 @@ public class main {
 
                     }
 
+                }else{
+                    for (int i = 0; i < palabras.length ; i++) {
+
+                        BufferedReader contenido = creador(url);
+                        int cont = buscaPalabras(palabras[i], contenido);
+
+                        if (cont == 0) {
+                            System.out.println("No se encontro la palabra buscada");
+                        } else {
+                            System.out.println(palabras[i] + " se encontro " + cont + " veces.");
+                        }
+
+                    }
+
+                }
+
+
+
+
+
+                if (palabras.length > 1){
+
+
+
                 }
                 content.close();
 
             }catch (Exception e){
-                System.out.println("Ha ocurrido un error al realizar la búsqueda");
+                System.out.println("Ha ocurrido un error al realizar la búsqueda "+ e.getStackTrace());
             }
             System.out.println("Desea realizar otra busqueda?");
 
@@ -94,18 +117,20 @@ public class main {
     }
 
     /*
-    *Método para realizar la búsqueda del valor ingresado
-    * @param  String: frase o palabra a buscar.
-    * @param  BufferedReader: file a donde realizar la búsqueda
-    * @ return Número de apariciones de la palabra buscada
+     *Método para realizar la búsqueda del valor ingresado
+     * @param  String: frase o palabra a buscar.
+     * @param  BufferedReader: file a donde realizar la búsqueda
+     * @ return Número de apariciones de la palabra buscada
      */
-    public static int find (String frase, BufferedReader rd) throws IOException {
+    public static int buscaFrase (String frase, BufferedReader rd) throws IOException {
+
+        String[] separa = separador(frase);
 
         int cont =0;
-        String[] separa = separador(frase);
         String linea;
         while ((linea = rd.readLine()) != null) {
-            String[] palabras = linea.split(" ");
+            linea = linea.toLowerCase().replaceAll("[-+.^:,]","");/*.replaceAll("[-+.^:,]","");*/
+            String[] palabras = separador(linea);
             String fraseDevuelta = new String();
             for (int i = 0; i < palabras.length; i++) {
                 int f = i;
@@ -114,13 +139,11 @@ public class main {
 
                         if (j < separa.length-1) {
                             fraseDevuelta = fraseDevuelta + palabras[f] + " ";
-                            f =f+1;
                         } else {
                             fraseDevuelta = fraseDevuelta +palabras[f];
-                            f =f+1;
                         }
 
-
+                        f++;
                     }
 
                     if (fraseDevuelta.equals(frase)) {
@@ -136,6 +159,7 @@ public class main {
         return cont;
     }
 
+
     /*
     *Método que busca palabra por palabra en cada una de las lineas.
     * @param String que contiene la palabra a buscar,
@@ -146,7 +170,8 @@ public class main {
         int cont =0;
        String linea;
         while((linea = rd.readLine()) != null) {
-            String[] palabras = linea.split(" ");
+            linea = linea.replaceAll("[-+.^:,]","");
+            String[] palabras = separador(linea);
             for(int i = 0 ; i < palabras.length ; i++) {
                 if(palabras[i].equals(palabra)) {
                     cont = cont+1;
