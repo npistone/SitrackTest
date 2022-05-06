@@ -3,32 +3,41 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
 import java.util.Scanner;
 
-public class main {
+public class SitrackMain {
     public static void main(String[] args) throws IOException {
 
         String resp = " ";
         do {
             try {
                 String url;
-                do {
-                    System.out.println("Ingrese la URL en la que desea buscar");
-                    Scanner lect = new Scanner(System.in).useDelimiter("\n");
-                    url = lect.next();
-                }while(url.isEmpty());
-                BufferedReader content = creador(url);
 
-                String busca;
+               do {
+                        System.out.println("Ingrese la URL en la que desea buscar");
+                        Scanner lect = new Scanner(System.in).useDelimiter("\n");
+                        url = lect.next();
+               } while (url.isEmpty());
+                 BufferedReader content = null ;
+
+                 content = creador(url);
+
+
+
+
+
+                String busca = null;
+                if (!(content == null)){
                 do {
                     System.out.println("Ingrese la frase a buscar");
                     Scanner lect1 = new Scanner(System.in).useDelimiter("\n");
                      busca = lect1.nextLine();
                      busca= busca.toLowerCase();
-                }while (busca.isEmpty());
+                     String reg = busca.replaceAll("\\s+","");
+                     if (reg.isEmpty() || reg == null){
+                         System.out.println("Debe ingresar por lo menos una palabra");
+                     }
+                }while (busca.isEmpty());  }
 
                 String [] palabras = separador(busca);
 
@@ -63,26 +72,17 @@ public class main {
                         if (cont == 0) {
                             System.out.println("No se encontro la palabra buscada");
                         } else {
-                            System.out.println(palabras[i] + " se encontro " + cont + " veces.");
+                            System.out.println("'"+palabras[i]+"'" + " se encontro " + cont + " vez/veces");
                         }
 
                     }
 
                 }
 
-
-
-
-
-                if (palabras.length > 1){
-
-
-
-                }
                 content.close();
 
             }catch (Exception e){
-                System.out.println("Ha ocurrido un error al realizar la búsqueda "+ e.getStackTrace());
+                System.out.println("Ha ocurrido un error al realizar la búsqueda:  " + e.getMessage());
             }
             System.out.println("Desea realizar otra busqueda?");
 
@@ -104,14 +104,16 @@ public class main {
     * Método que genera un fichero para realizar la lectura del HTML origen
     * @ return BufferedReader
     */
-    public static BufferedReader creador (String url) throws MalformedURLException {
+    public static BufferedReader creador (String url) throws IOException {
         BufferedReader in = null;
         try {
             URL ficheroUrl = new URL(url);
             in = new BufferedReader(new InputStreamReader(ficheroUrl.openStream()));
 
         } catch (IOException e) {
-            System.out.println("Error de formato, URL no válido");
+            e.getMessage();
+            throw new IOException("Error URL no válida");
+            
         }
         return in;
     }
